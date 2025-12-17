@@ -4,7 +4,7 @@ A powerful bookmarklet for X.com (Twitter) Spaces that lets you assign custom ke
 
 Perfect for frequent Space participants, hosts, or anyone who wants faster control during live audio conversations.
 
-<img width="465" height="554" alt="image" src="https://github.com/user-attachments/assets/63ddc8a7-8520-4262-945e-e42b6705959b" />
+<img width="519" height="688" alt="image" src="https://github.com/user-attachments/assets/ee90eef6-8755-45f3-9b33-27c09ebc0829" />
 
 
 ## Features
