@@ -4,6 +4,9 @@ A powerful bookmarklet for X.com (Twitter) Spaces that lets you assign custom ke
 
 Perfect for frequent Space participants, hosts, or anyone who wants faster control during live audio conversations.
 
+<img width="465" height="554" alt="image" src="https://github.com/user-attachments/assets/63ddc8a7-8520-4262-945e-e42b6705959b" />
+
+
 ## Features
 
 - **Custom hotkeys** for:
