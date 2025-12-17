@@ -1,7 +1,8 @@
-javascript: (function () {
+(function () {
   try {
+    // Storage key mapping
     const storageKeys = {
-      mute: "xSpaceMuteKey",
+      toggleSpeak: "xSpaceToggleSpeakKey", // renamed from mute
       leave: "xSpaceLeaveKey",
       laugh: "xSpaceLaughKey",
       astonished: "xSpaceAstonishedKey",
@@ -15,42 +16,62 @@ javascript: (function () {
       wave: "xSpaceWaveKey",
       raisehand: "xSpaceRaiseHandKey",
     };
+
+    // Load current shortcuts
     const savedKeys = {};
     for (const action in storageKeys) {
       const val = localStorage.getItem(storageKeys[action]);
       savedKeys[action] = val === " " ? " " : val || "";
     }
-    const muteBtn = document.querySelector(
-      'button[aria-label="Mute"], button[aria-label="Unmute"]'
+
+    // Find required controls
+    const toggleSpeakBtn = document.querySelector(
+      'button[data-testid="micButton"], button[aria-label*="Mute"], button[aria-label*="Unmute"], button[aria-label*="Request to speak"], button[aria-label*="Push to talk"]'
     );
     const leaveBtn =
       document.querySelector(
-        'button[aria-label*="Leave quietly"], button[aria-label*="Leave the Space"]'
+        'button[aria-label*="Leave quietly"], button[aria-label*="Leave the Space"], button[data-testid="leaveSpaceButton"], button[aria-label*="End"]'
       ) ||
       document
         .querySelector('svg path[d^="M17 12v3h-"]')
         ?.closest('button,[role="button"]');
     const reactBtn = document.querySelector(
-      'button[aria-label="React"][role="button"]'
+      'button[aria-label="React"][role="button"], button[data-testid="reactionsButton"], button[aria-label*="Request to speak"], button[aria-label*="Raise hand"]'
     );
-    if (!muteBtn || !leaveBtn || !reactBtn) {
-      alert("Not in a live Space or controls not fully loaded yet.");
-      return;
-    }
+
+    // Removed the strict loaded check — proceed even if some buttons are missing
+
+    // Overlay
     const overlay = document.createElement("div");
-    overlay.style.cssText =
-      'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;';
+    overlay.style.cssText = `
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,0.5);z-index:9999;
+      display:flex;align-items:center;justify-content:center;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    `;
+
+    // Popup container
     const popup = document.createElement("div");
-    popup.style.cssText =
-      "background:#fff;padding:24px;border-radius:16px;width:90%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,0.3);";
+    popup.style.cssText = `
+      background:#fff;padding:24px;border-radius:16px;
+      width:90%;max-width:500px;max-height:90vh;overflow-y:auto;
+      box-shadow:0 20px 50px rgba(0,0,0,0.3);
+    `;
+
+    // Title
     const title = document.createElement("h2");
     title.textContent = "X Spaces Hotkeys";
     title.style.cssText =
       "margin:0 0 20px;font-size:22px;font-weight:700;text-align:center;";
     popup.appendChild(title);
+
+    // Grid for emoji shortcuts
     const grid = document.createElement("div");
-    grid.style.cssText =
-      "display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;";
+    grid.style.cssText = `
+      display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+      margin-bottom:24px;
+    `;
+
     const emojiActions = [
       { action: "laugh", emoji: "😂" },
       { action: "astonished", emoji: "😲" },
@@ -64,79 +85,106 @@ javascript: (function () {
       { action: "wave", emoji: "👋" },
       { action: "raisehand", emoji: "✋" },
     ];
+
     const inputs = {};
+
     emojiActions.forEach((item) => {
       const cell = document.createElement("div");
       cell.style.cssText =
         "display:flex;flex-direction:column;align-items:center;gap:8px;";
+
       const emojiSpan = document.createElement("span");
       emojiSpan.textContent = item.emoji;
       emojiSpan.style.fontSize = "32px";
+
       const input = document.createElement("input");
       input.type = "text";
       input.placeholder = "-";
-      input.style.cssText =
-        "width:50px;padding:8px 4px;font-size:18px;text-align:center;border:1px solid #ddd;border-radius:8px;";
+      input.style.cssText = `
+        width:50px;padding:8px 4px;font-size:18px;text-align:center;
+        border:1px solid #ddd;border-radius:8px;
+      `;
       const saved = savedKeys[item.action];
       input.value = saved === " " ? "Space" : saved || "";
+
       input.onkeydown = function (e) {
         e.preventDefault();
-        if (e.key === " ") input.value = "Space";
-        else if (e.key.length === 1) input.value = e.key.toUpperCase();
+        if (e.key === " ") {
+          input.value = "Space";
+        } else if (e.key.length === 1) {
+          input.value = e.key.toUpperCase();
+        }
       };
+
       inputs[item.action] = input;
       cell.appendChild(emojiSpan);
       cell.appendChild(input);
       grid.appendChild(cell);
     });
+
+    // Special controls
     const specialGrid = document.createElement("div");
     specialGrid.style.cssText =
       "display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;";
+
     const specialActions = [
-      { action: "mute", label: "Mute/Unmute", icon: "🔇" },
+      {
+        action: "toggleSpeak",
+        label: "Mute / Unmute / Request To Speak",
+        icon: "🎤",
+      },
       { action: "leave", label: "Leave Quietly", icon: "🚪" },
     ];
+
     specialActions.forEach((item) => {
       const cell = document.createElement("div");
       cell.style.cssText =
         "display:flex;flex-direction:column;align-items:center;gap:8px;";
+
+      const icon = document.createElement("span");
+      icon.textContent = item.icon;
+      icon.style.fontSize = "28px";
+
       const label = document.createElement("div");
       label.textContent = item.label;
       label.style.fontSize = "14px";
       label.style.textAlign = "center";
-      const icon = document.createElement("span");
-      icon.textContent = item.icon;
-      icon.style.fontSize = "28px";
+
       const input = document.createElement("input");
       input.type = "text";
       input.placeholder = "-";
       input.style.cssText =
-        "width:60px;padding:10px;font-size:18px;text-align:center;border:1px solid #ddd;border-radius:8px;";
+        "width:80px;padding:10px;font-size:18px;text-align:center;border:1px solid #ddd;border-radius:8px;";
       const saved = savedKeys[item.action];
       input.value = saved === " " ? "Space" : saved || "";
+
       input.onkeydown = function (e) {
         e.preventDefault();
         if (e.key === " ") input.value = "Space";
         else if (e.key.length === 1) input.value = e.key.toUpperCase();
       };
+
       inputs[item.action] = input;
       cell.appendChild(icon);
       cell.appendChild(label);
       cell.appendChild(input);
       specialGrid.appendChild(cell);
     });
+
     popup.appendChild(specialGrid);
     popup.appendChild(grid);
+
+    // Buttons
     const btnContainer = document.createElement("div");
     btnContainer.style.cssText =
       "display:flex;gap:12px;justify-content:flex-end;margin-top:20px;";
+
     const cancelBtn = document.createElement("button");
     cancelBtn.textContent = "Cancel";
     cancelBtn.style.cssText =
       "padding:10px 20px;border:1px solid #ddd;border-radius:999px;background:transparent;cursor:pointer;";
-    cancelBtn.onclick = () => {
-      document.body.removeChild(overlay);
-    };
+    cancelBtn.onclick = () => document.body.removeChild(overlay);
+
     const saveBtn = document.createElement("button");
     saveBtn.textContent = "Save & Close";
     saveBtn.style.cssText =
@@ -165,35 +213,48 @@ javascript: (function () {
       document.body.removeChild(overlay);
       setupGlobalListener();
     };
+
     btnContainer.appendChild(cancelBtn);
     btnContainer.appendChild(saveBtn);
     popup.appendChild(btnContainer);
+
     overlay.appendChild(popup);
     document.body.appendChild(overlay);
+
+    // Close on background click
     overlay.onclick = (e) => {
       if (e.target === overlay) document.body.removeChild(overlay);
     };
+
+    // Global hotkey listener
     function setupGlobalListener() {
       document.removeEventListener("keydown", globalHandler);
       document.addEventListener("keydown", globalHandler);
+
       function globalHandler(e) {
         if (e.target.tagName === "INPUT" || e.target.isContentEditable) return;
+
         const key = e.key.toUpperCase();
         const isSpace = e.code === "Space";
+
         for (const action in savedKeys) {
           const saved = savedKeys[action];
           if (!saved) continue;
           if ((isSpace && saved === " ") || key === saved.toUpperCase()) {
             if (saved === " ") e.preventDefault();
-            if (action === "mute") {
-              muteBtn.click();
+
+            if (action === "toggleSpeak") {
+              toggleSpeakBtn?.click?.();
               return;
             }
             if (action === "leave") {
               leaveBtn?.click?.();
               return;
             }
-            reactBtn.click();
+
+            // Emoji reactions
+            reactBtn?.click?.();
+
             const emojiMap = {
               laugh: "😂",
               astonished: "😲",
@@ -207,16 +268,19 @@ javascript: (function () {
               wave: "👋",
               raisehand: "✋",
             };
+
             const target = emojiMap[action];
+
             const observer = new MutationObserver(() => {
               const btn = Array.from(
                 document.querySelectorAll("button[aria-label]")
-              ).find((b) => b.getAttribute("aria-label").includes(target));
+              ).find((b) => b.getAttribute("aria-label")?.includes(target));
               if (btn) {
                 btn.click();
                 observer.disconnect();
               }
             });
+
             observer.observe(document.body, { childList: true, subtree: true });
             setTimeout(() => observer.disconnect(), 3000);
             return;
@@ -224,6 +288,7 @@ javascript: (function () {
         }
       }
     }
+
     setupGlobalListener();
   } catch (e) {
     alert("Error: " + e.message);
