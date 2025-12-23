@@ -21,7 +21,7 @@ Perfect for frequent Space participants, hosts, or anyone who wants faster contr
 
 ## Installation
 
-1. Copy the bookmarklet code from the source file: [`bookmarklet.js`](bookmarklet.js)
+1. Copy the bookmarklet code from the source file: [`bookmarklet.js`](bookmarklet.js) <img width="1530" height="154" alt="image" src="https://github.com/user-attachments/assets/51ae1daa-1d2f-429e-adc8-b48ec9dcd053" />
 2. Create a new bookmark in your browser:
    - Right-click the bookmarks bar → **Add page** / **New bookmark**
    - Name it something like **"Spaces Hotkeys"**
