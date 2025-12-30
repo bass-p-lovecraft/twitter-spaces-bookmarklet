@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X Spaces Hotkeys</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        margin: 0;
+        padding: 24px;
+        width: 500px;
+        background: #fff;
+      }
+      h2 {
+        margin: 0 0 20px;
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+      }
+      .mute-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 24px;
+      }
+      .cell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+      .mute-icon {
+        font-size: 32px;
+      }
+      .emoji {
+        font-size: 32px;
+      }
+      .label {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      input {
+        padding: 10px;
+        font-size: 18px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .mute-input {
+        width: 80px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+      .emoji-input {
+        width: 50px;
+        padding: 8px 4px;
+      }
+      .btns {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        margin-top: 20px;
+      }
+      button {
+        padding: 10px 20px;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+      .cancel {
+        border: 1px solid #ddd;
+        background: transparent;
+      }
+      .save {
+        padding: 10px 24px;
+        background: #000;
+        color: #fff;
+        border: none;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>X Spaces Hotkeys</h2>
+    <div class="mute-wrapper">
+      <div class="cell">
+        <span class="mute-icon">🎤</span>
+        <div class="label">Mute / Speak</div>
+        <input
+          id="toggleSpeak"
+          class="mute-input"
+          type="text"
+          placeholder="-"
+        />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="cell">
+        <span class="emoji">😂</span>
+        <input id="laugh" class="emoji-input" type="text" placeholder="-" />
+      </div>
+      <div class="cell">
+        <span class="emoji">😲</span>
+        <input id="astonished" class="emoji-input" type="text" placeholder="-" />
+      </div>
+      <div class="cell">
+        <span class="emoji">😢</span>
+        <input id="cry" class="emoji-input" type="text" placeholder="-" />
+      </div>
+      <div class="cell">
+        <span class="emoji">💜</span>
+        <input id="purple" class="emoji-input" type="text" placeholder="-" />
+      </div>
+      <div class="cell">
+        <span class="emoji">💯</span>
+        <input id="hundred" class="emoji-input" type="text" placeholder="-" />
+      </div>
+      <div class="cell">
+        <span class="emoji">👏</span>
+        <input id="clap" class="emoji-input" type="text" placeholder="-" />
+      </div>
+      <div class="cell">
+        <span class="emoji">✊</span>
+        <input id="fist" class="emoji-input" type="text" placeholder="-" />
+      </div>
+      <div class="cell">
+        <span class="emoji">👍</span>
+        <input id="thumbsup" class="emoji-input" type="text" placeholder="-" />
+      </div>
+      <div class="cell">
+        <span class="emoji">👎</span>
+        <input id="thumbsdown" class="emoji-input" type="text" placeholder="-" />
+      </div>
+      <div class="cell">
+        <span class="emoji">👋</span>
+        <input id="wave" class="emoji-input" type="text" placeholder="-" />
+      </div>
+      <div class="cell">
+        <span class="emoji">✋</span>
+        <input id="raisehand" class="emoji-input" type="text" placeholder="-" />
+      </div>
+    </div>
+    <div class="btns">
+      <button class="cancel">Cancel</button>
+      <button class="save">Save & Close</button>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

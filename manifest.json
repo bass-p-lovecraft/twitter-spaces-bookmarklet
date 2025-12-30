@@ -1,0 +1,40 @@
+{
+    "manifest_version": 3,
+    "name": "X Spaces Hotkeys",
+    "version": "1.0",
+    "description": "Configurable keyboard shortcuts for X/Twitter Spaces: mute/speak toggle and emoji reactions. Includes rate-limit toast notifications.",
+    "permissions": [
+        "storage"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "X Spaces Hotkeys - Configure shortcuts",
+        "default_icon": {
+            "128": "icon.png"
+        }
+    },
+    "icons": {
+        "128": "icon.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*.x.com/*",
+                "https://*.twitter.com/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_end"
+        }
+    ],
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+K",
+                "mac": "Command+Shift+K"
+            },
+            "description": "Open X Spaces Hotkeys configuration"
+        }
+    }
+}
