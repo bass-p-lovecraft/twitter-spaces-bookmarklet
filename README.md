@@ -1,4 +1,4 @@
-# X Spaces Hotkeys - Chrome Extension Installation Guide
+# X Spaces Hotkeys - Browser Extension Installation Guide
 
  <img width="627" height="635" alt="Screenshot 2026-01-01 at 7 00 12 AM" src="https://github.com/user-attachments/assets/71b4998d-714b-4691-a595-25317e0c1d91" />
 
